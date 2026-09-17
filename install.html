@@ -1,17 +1,25 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Songspot — Install</title>
+<title>Songspot — Install the test build</title>
 <style>
   :root{color-scheme:dark} body{margin:0;background:#030704;color:#f2f2f2;font:16px/1.65 -apple-system,system-ui,sans-serif}
-  main{max-width:28rem;margin:0 auto;padding:72px 24px;text-align:center}
-  h1{font-size:34px;font-weight:800;font-style:italic;letter-spacing:-.03em;margin:0 0 24px}
+  main{max-width:28rem;margin:0 auto;padding:72px 24px 96px;text-align:center}
+  h1{font-size:34px;font-weight:800;font-style:italic;letter-spacing:-.03em;margin:0 0 6px}
+  .build{color:#4a4a4a;font-size:13px;margin:0 0 32px}
   a.btn{display:inline-block;background:#19df70;color:#04120a;font-weight:700;padding:16px 32px;border-radius:999px;text-decoration:none;font-size:17px}
   p{color:#a8a8a8} small{color:#4a4a4a}
+  ol{text-align:left;color:#a8a8a8;padding-left:22px} li{margin-bottom:8px}
 </style></head>
 <body><main>
   <h1>songspot</h1>
+  <p class="build">Test build · 17 September 2026</p>
   <p>Open this page in <strong>Safari on the iPhone</strong>, then tap:</p>
   <p><a class="btn" href="itms-services://?action=download-manifest&amp;url=https://policies-ecru.vercel.app/songspot.plist">Install Songspot</a></p>
   <p>Tap <em>Install</em> when iOS asks. The icon appears on the Home Screen and downloads in the background.</p>
-  <p><small>Pre-release build. Only installs on iPhones registered to the developer account.</small></p>
+  <ol>
+    <li>If iOS won't open the app, turn on <strong>Developer Mode</strong>: Settings → Privacy &amp; Security → Developer Mode, then restart the phone.</li>
+    <li>If it says the developer isn't trusted: Settings → General → VPN &amp; Device Management → trust the profile.</li>
+    <li>This build shows Google's test ads and adds a test bot to any party you host. Premium can be switched on from the Profile screen (developer row near the bottom).</li>
+  </ol>
+  <p><small>Only installs on iPhones registered to the developer account.</small></p>
 </main></body></html>
