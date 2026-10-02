@@ -27,6 +27,7 @@
   .label { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
   .code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 800; letter-spacing: 1px;
     font-size: 44px; white-space: nowrap; text-align: center; margin: 34px 0 10px; user-select: all; }
+  .link { text-align: center; color: var(--muted); font-size: 12px; word-break: break-all; margin: 0 0 6px; font-family: ui-monospace, Menlo, monospace; }
   .left { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 24px; }
   .row { display: flex; gap: 10px; }
   button { font: inherit; border: 0; cursor: pointer; border-radius: 16px; height: 56px; padding: 0 18px;
@@ -85,9 +86,10 @@
       <div class="label">Free lifetime premium</div>
       <div id="codeBox">
         <div class="code" id="code">…</div>
+        <div class="link" id="link"></div>
         <div class="left" id="left"></div>
         <div class="row">
-          <button class="secondary" id="copyBtn">Copy code</button>
+          <button class="secondary" id="copyBtn">Copy link</button>
           <button class="primary" id="shareBtn">Share</button>
         </div>
       </div>
@@ -137,7 +139,7 @@ function render(state) {
   const has = !!current;
   $("codeBox").classList.toggle("hidden", !has);
   $("empty").classList.toggle("hidden", has);
-  if (has) { $("code").textContent = current; fit(); }
+  if (has) { $("code").textContent = current; $("link").textContent = REDEEM(current); fit(); }
   $("left").textContent = `${state.left} code${state.left === 1 ? "" : "s"} left`;
   if (!has) $("addCard").classList.remove("hidden");
 }
@@ -182,14 +184,15 @@ async function used(how) {
   const code = current;
   lastUsed = code;
   render(await rpc("gift_use", { p_pass: pass, p_code: code, p_how: how }));
-  toast(how === "share" ? "Shared. Next code ready." : "Copied. Next code ready.");
+  toast(how === "share" ? "Link shared. Next code ready." : "Link copied. Next code ready.");
 }
 
 $("copyBtn").onclick = async () => {
   if (!current) return;
-  try { await navigator.clipboard.writeText(current); }
+  const link = REDEEM(current);
+  try { await navigator.clipboard.writeText(link); }
   catch (_) {
-    const t = document.createElement("textarea"); t.value = current; document.body.appendChild(t);
+    const t = document.createElement("textarea"); t.value = link; document.body.appendChild(t);
     t.select(); const ok = document.execCommand("copy"); t.remove(); if (!ok) return;
   }
   await used("copy");
@@ -197,11 +200,11 @@ $("copyBtn").onclick = async () => {
 
 $("shareBtn").onclick = async () => {
   if (!current) return;
-  const text = `Here's a free Songspot Premium code: ${current}\nRedeem it here: ${REDEEM(current)}`;
+  const link = REDEEM(current);
   if (navigator.share) {
-    try { await navigator.share({ text }); } catch (e) { if (e && e.name === "AbortError") return; else return; }
+    try { await navigator.share({ url: link }); } catch (_) { return; }
   } else {
-    try { await navigator.clipboard.writeText(text); } catch (_) { return; }
+    try { await navigator.clipboard.writeText(link); } catch (_) { return; }
   }
   await used("share");
 };
