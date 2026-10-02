@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0f0c">
+<title>Songspot Gift Codes</title>
+<style>
+  :root {
+    --bg: #0b0f0c; --card: #121814; --line: #1f2a22; --text: #f2f5f3; --muted: #9aa59e;
+    --accent: #1ed760; --ink: #04140a; --danger: #ff5c5c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif; }
+  body { min-height: 100dvh; display: flex; flex-direction: column; align-items: center;
+    padding: max(20px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+    background: radial-gradient(120% 60% at 50% 0%, rgba(30,215,96,.12), transparent 60%), var(--bg); }
+  main { width: 100%; max-width: 440px; flex: 1; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .logo { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; }
+  .logo svg { width: 14px; height: 14px; margin-left: 2px; }
+  h1 { font-size: 20px; font-weight: 900; font-style: italic; letter-spacing: -.4px; margin: 0; }
+  .grow { flex: 1; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; }
+  .label { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  .code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 800; letter-spacing: 2px;
+    font-size: clamp(26px, 8.6vw, 40px); word-break: break-all; text-align: center; margin: 26px 0 8px; user-select: all; }
+  .left { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .row { display: flex; gap: 10px; }
+  button { font: inherit; border: 0; cursor: pointer; border-radius: 16px; height: 56px; padding: 0 18px;
+    font-size: 17px; font-weight: 800; transition: transform .12s ease, opacity .2s; touch-action: manipulation; }
+  button:active { transform: scale(.97); }
+  button:disabled { opacity: .4; cursor: default; }
+  .primary { background: var(--accent); color: var(--ink); flex: 1; }
+  .secondary { background: rgba(255,255,255,.07); color: var(--text); border: 1px solid var(--line); flex: 1; }
+  .ghost { background: none; color: var(--muted); height: 40px; font-size: 14px; font-weight: 600; padding: 0 6px; }
+  input, textarea { width: 100%; font: inherit; color: var(--text); background: #0d120f; border: 1px solid var(--line);
+    border-radius: 14px; padding: 16px; font-size: 17px; outline: none; }
+  input:focus, textarea:focus { border-color: var(--accent); }
+  textarea { min-height: 180px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; resize: vertical; }
+  p.note { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 10px 0 18px; }
+  .err { color: var(--danger); font-size: 14px; min-height: 20px; margin-top: 10px; }
+  .toast { position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px);
+    background: #1b241e; border: 1px solid var(--line); color: var(--text); border-radius: 14px; padding: 12px 14px 12px 16px;
+    display: flex; gap: 14px; align-items: center; font-size: 15px; opacity: 0; pointer-events: none; transition: .25s ease; }
+  .toast.show { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+  .toast button { height: 34px; border-radius: 10px; font-size: 14px; background: rgba(30,215,96,.15); color: var(--accent); padding: 0 12px; }
+  .empty { text-align: center; color: var(--muted); margin: 34px 0 30px; font-size: 16px; }
+  .hidden { display: none !important; }
+  .foot { display: flex; justify-content: space-between; margin-top: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="logo"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z" fill="#000"/></svg></div>
+    <h1>Gift codes</h1>
+  </header>
+
+  <!-- choose a passcode (first visit only) -->
+  <section id="setup" class="card hidden">
+    <div class="label">First time</div>
+    <p class="note">Choose a passcode for this page. You'll need it on every device. At least 6 characters.</p>
+    <input id="newPass" type="password" autocomplete="new-password" placeholder="New passcode">
+    <div style="height:10px"></div>
+    <button class="primary" style="width:100%" id="setupBtn">Save passcode</button>
+    <div class="err" id="setupErr"></div>
+  </section>
+
+  <!-- unlock -->
+  <section id="lock" class="card hidden">
+    <div class="label">Locked</div>
+    <p class="note">Enter the passcode to see the codes.</p>
+    <input id="pass" type="password" autocomplete="current-password" placeholder="Passcode">
+    <div style="height:10px"></div>
+    <button class="primary" style="width:100%" id="unlockBtn">Unlock</button>
+    <div class="err" id="lockErr"></div>
+  </section>
+
+  <!-- the code -->
+  <section id="main" class="hidden">
+    <div class="card">
+      <div class="label">Free lifetime premium</div>
+      <div id="codeBox">
+        <div class="code" id="code">…</div>
+        <div class="left" id="left"></div>
+        <div class="row">
+          <button class="secondary" id="copyBtn">Copy code</button>
+          <button class="primary" id="shareBtn">Share</button>
+        </div>
+      </div>
+      <div class="empty hidden" id="empty">No codes left. Add more below.</div>
+    </div>
+    <div class="foot">
+      <button class="ghost" id="addOpen">Add codes</button>
+      <button class="ghost" id="lockBtn">Lock</button>
+    </div>
+
+    <div class="card hidden" id="addCard" style="margin-top:8px">
+      <div class="label">Add codes</div>
+      <p class="note">Paste the codes from Apple's download (the whole file is fine; only the codes are kept).</p>
+      <textarea id="paste" placeholder="Paste here"></textarea>
+      <div style="height:10px"></div>
+      <button class="primary" style="width:100%" id="addBtn">Add</button>
+      <div class="err" id="addErr"></div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"><span id="toastText"></span><button id="undoBtn">Undo</button></div>
+
+<script>
+const URL_ = "https://ytqjphkydvzpfecbehko.supabase.co/rest/v1/rpc/";
+const KEY = "sb_publishable_peO3Uwcw4z_nwGDZ2iRE8g_pE0uGY0X";
+const REDEEM = c => `https://apps.apple.com/redeem?ctx=offercodes&id=6808657554&code=${encodeURIComponent(c)}`;
+const $ = id => document.getElementById(id);
+let pass = null, current = null, lastUsed = null, toastTimer = null;
+
+function store(k, v) { try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch (_) {} }
+function load(k) { try { return sessionStorage.getItem(k); } catch (_) { return null; } }
+
+async function rpc(name, body) {
+  const r = await fetch(URL_ + name, { method: "POST",
+    headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json" },
+    body: JSON.stringify(body || {}) });
+  if (!r.ok) throw new Error((await r.text()) || r.status);
+  return r.json();
+}
+
+function show(id) { for (const s of ["setup", "lock", "main"]) $(s).classList.toggle("hidden", s !== id); }
+
+function render(state) {
+  if (!state || !state.ok) { pass = null; store("gp", null); show("lock"); $("lockErr").textContent = "Wrong passcode."; return; }
+  current = state.code;
+  const has = !!current;
+  $("codeBox").classList.toggle("hidden", !has);
+  $("empty").classList.toggle("hidden", has);
+  if (has) $("code").textContent = current;
+  $("left").textContent = `${state.left} code${state.left === 1 ? "" : "s"} left`;
+  if (!has) $("addCard").classList.remove("hidden");
+}
+
+async function start() {
+  try {
+    const ready = await rpc("gift_ready");
+    if (!ready) { show("setup"); return; }
+    pass = load("gp");
+    if (pass) { const s = await rpc("gift_next", { p_pass: pass }); show("main"); render(s); }
+    else show("lock");
+  } catch (e) { show("lock"); $("lockErr").textContent = "Can't reach the server."; }
+}
+
+$("setupBtn").onclick = async () => {
+  const p = $("newPass").value;
+  if (p.length < 6) { $("setupErr").textContent = "At least 6 characters."; return; }
+  const ok = await rpc("gift_setup", { p_pass: p }).catch(() => false);
+  if (!ok) { $("setupErr").textContent = "A passcode is already set."; show("lock"); return; }
+  pass = p; store("gp", p); show("main"); render(await rpc("gift_next", { p_pass: p }));
+};
+
+async function unlock() {
+  const p = $("pass").value;
+  $("lockErr").textContent = "";
+  const s = await rpc("gift_next", { p_pass: p }).catch(() => null);
+  if (!s || !s.ok) { $("lockErr").textContent = "Wrong passcode (5 wrong tries lock it for 15 minutes)."; return; }
+  pass = p; store("gp", p); $("pass").value = ""; show("main"); render(s);
+}
+$("unlockBtn").onclick = unlock;
+$("pass").addEventListener("keydown", e => { if (e.key === "Enter") unlock(); });
+
+async function used(how) {
+  const code = current;
+  lastUsed = code;
+  render(await rpc("gift_use", { p_pass: pass, p_code: code, p_how: how }));
+  toast(how === "share" ? "Shared. Next code ready." : "Copied. Next code ready.");
+}
+
+$("copyBtn").onclick = async () => {
+  if (!current) return;
+  try { await navigator.clipboard.writeText(current); }
+  catch (_) {
+    const t = document.createElement("textarea"); t.value = current; document.body.appendChild(t);
+    t.select(); const ok = document.execCommand("copy"); t.remove(); if (!ok) return;
+  }
+  await used("copy");
+};
+
+$("shareBtn").onclick = async () => {
+  if (!current) return;
+  const text = `Here's a free Songspot Premium code: ${current}\nRedeem it here: ${REDEEM(current)}`;
+  if (navigator.share) {
+    try { await navigator.share({ text }); } catch (e) { if (e && e.name === "AbortError") return; else return; }
+  } else {
+    try { await navigator.clipboard.writeText(text); } catch (_) { return; }
+  }
+  await used("share");
+};
+
+function toast(msg) {
+  $("toastText").textContent = msg;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 6000);
+}
+$("undoBtn").onclick = async () => {
+  if (!lastUsed) return;
+  render(await rpc("gift_unuse", { p_pass: pass, p_code: lastUsed }));
+  lastUsed = null; $("toast").classList.remove("show");
+};
+
+$("addOpen").onclick = () => $("addCard").classList.toggle("hidden");
+$("addBtn").onclick = async () => {
+  const tokens = ($("paste").value.toUpperCase().match(/[A-Z0-9]{6,32}/g) || [])
+    .filter(t => /[0-9]/.test(t) && /[A-Z]/.test(t));
+  if (!tokens.length) { $("addErr").textContent = "No codes found in that text."; return; }
+  const s = await rpc("gift_add", { p_pass: pass, p_codes: tokens }).catch(() => null);
+  if (!s || !s.ok) { $("addErr").textContent = "Couldn't add them."; return; }
+  $("addErr").textContent = ""; $("paste").value = ""; $("addCard").classList.add("hidden");
+  render(s); toast(`${s.added} new code${s.added === 1 ? "" : "s"} added.`);
+};
+
+$("lockBtn").onclick = () => { pass = null; store("gp", null); show("lock"); };
+start();
+</script>
+</body>
+</html>
