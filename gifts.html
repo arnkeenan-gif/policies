@@ -183,8 +183,18 @@ $("pass").addEventListener("keydown", e => { if (e.key === "Enter") unlock(); })
 async function used(how) {
   const code = current;
   lastUsed = code;
-  render(await rpc("gift_use", { p_pass: pass, p_code: code, p_how: how }));
-  toast(how === "share" ? "Link shared. Next code ready." : "Link copied. Next code ready.");
+  // The link is already out: mark it used, trying again if the network
+  // drops, so the same one-time code is never handed to a second person.
+  for (let tries = 0; tries < 4; tries++) {
+    try {
+      render(await rpc("gift_use", { p_pass: pass, p_code: code, p_how: how }));
+      toast(how === "share" ? "Link shared. Next code ready." : "Link copied. Next code ready.");
+      return;
+    } catch (_) { await new Promise(r => setTimeout(r, 1500)); }
+  }
+  $("codeBox").classList.add("hidden");
+  $("empty").classList.remove("hidden");
+  $("empty").textContent = "Couldn't mark that code as used. Don't hand it out again; reload the page.";
 }
 
 $("copyBtn").onclick = async () => {
